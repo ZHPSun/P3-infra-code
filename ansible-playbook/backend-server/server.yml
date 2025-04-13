@@ -1,0 +1,36 @@
+- hosts: backend-server
+  vars:
+    backend_repo: "https://github.com/ZHPSun/goexpertbackendtest.git"
+    app_dir: "/home/ubuntu/goexpertbackend"
+  tasks:
+    - name: update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+    - name: Install nodejs npm and git
+      apt:
+        name:
+          - nodejs
+          - npm
+          - git
+        state: present
+
+    - name: Clone backend repo
+      git:
+        repo: "{{ backend_repo }}"
+        dest: "{{ app_dir }}"
+
+    - name: Install backend dependencies
+      command: npm install
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Build backend
+      command: npm run build
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Start backend
+      command: npm run start
+      args:
+        chdir: "{{ app_dir }}"

@@ -1,0 +1,23 @@
+# group_vars/all.yml
+
+# ---------- Prometheus 配置 ----------
+prometheus_version: "2.45.0"
+prometheus_web_listen_address: "0.0.0.0:9090"
+
+# ---------- Node Exporter 配置 ----------
+node_exporter_version: "1.6.1"
+node_exporter_web_listen_address: "0.0.0.0:9100"
+
+# ---------- Grafana 配置 ----------
+grafana_version: "10.2.2"
+
+grafana_security:
+  admin_user: admin
+  admin_password: admin
+
+grafana_datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://localhost:9090
+    isDefault: true

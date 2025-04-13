@@ -1,0 +1,29 @@
+- name: Install Docker
+  package:
+    name: docker
+    state: present
+
+- name: Start and enable Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Add ec2-user to docker group # 注意是amazon linux2023 还是 ubuntu，或者用jenkins用户
+  user:
+    name: ec2-user
+    groups: docker
+    append: yes
+
+- name: Create CLI plugin directory
+  file:
+    path: /usr/local/lib/docker/cli-plugins
+    state: directory
+    mode: "0755"
+    recurse: yes
+
+- name: Install docker compose plugin
+  get_url:
+    url: https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64
+    dest: /usr/local/lib/docker/cli-plugins/docker-compose
+    mode: "0755"

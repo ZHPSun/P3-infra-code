@@ -1,0 +1,9 @@
+- name: Install common dependencies
+  package:
+    name:
+      - curl
+      - wget
+      - unzip
+      - git
+      - java-11-openjdk
+    state: present

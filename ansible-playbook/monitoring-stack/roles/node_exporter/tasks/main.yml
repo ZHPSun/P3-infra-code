@@ -1,0 +1,42 @@
+- name: Download Node Exporter
+  get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
+    dest: /tmp/node_exporter.tar.gz
+
+- name: Extract Node Exporter
+  unarchive:
+    src: /tmp/node_exporter.tar.gz
+    dest: /tmp/
+    remote_src: yes
+
+- name: Move binary
+  copy:
+    src: /tmp/node_exporter-1.8.1.linux-amd64/node_exporter
+    dest: /usr/local/bin/node_exporter
+    mode: "0755"
+    remote_src: yes ##容易出错
+
+- name: Create systemd service for Node Exporter
+  copy:
+    dest: /etc/systemd/system/node_exporter.service
+    content: |
+      [Unit]
+      Description=Node Exporter
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/local/bin/node_exporter
+
+      [Install]
+      WantedBy=default.target
+
+- name: Start Node Exporter
+  systemd:
+    daemon_reload: yes
+    name: node_exporter
+    enabled: yes
+    state: started
+
+- name: Test role load
+  debug:
+    msg: "Role node_exporter is active"

@@ -1,0 +1,5 @@
+[jenkins]
+name=Jenkins-stable
+baseurl=https://pkg.jenkins.io/redhat-stable
+gpgcheck=1
+gpgkey=https://pkg.jenkins.io/redhat-stable/jenkins.io.key

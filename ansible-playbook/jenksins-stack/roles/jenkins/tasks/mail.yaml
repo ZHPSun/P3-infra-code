@@ -1,0 +1,28 @@
+- name: Add Jenkins repo (Amazon Linux / RHEL)
+  copy:
+    src: jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: Import Jenkins GPG key
+  rpm_key:
+    state: present
+    key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+- name: Install Jenkins
+  package:
+    name: jenkins
+    state: present
+
+- name: Start and enable Jenkins
+  systemd:
+    name: jenkins
+    enabled: yes
+    state: started
+
+- name: Print initial Jenkins admin password
+  shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+  register: jenkins_password
+
+- name: Show Jenkins password
+  debug:
+    msg: "Initial Jenkins admin password is: {{ jenkins_password.stdout }}"

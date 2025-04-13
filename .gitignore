@@ -1,0 +1,59 @@
+# ----------------------
+# General
+# ----------------------
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+__pycache__/
+
+# ----------------------
+# Terraform
+# ----------------------
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/terraform.tfvars
+**/*.tfplan
+
+# If you use local override files
+**/*.auto.tfvars
+**/*.tfvars.json
+
+# ----------------------
+# Ansible
+# ----------------------
+**/inventory/*.ini~
+**/inventory/*.retry
+**/*.retry
+**/host_vars/*.retry
+**/group_vars/*.retry
+
+# Ansible Vault (if applicable)
+**/.vault_pass.txt
+
+# ----------------------
+# Python / Virtualenv (if used)
+# ----------------------
+.venv/
+env/
+venv/
+*.pyc
+*.pyo
+*.pyd
+
+# ----------------------
+# VSCode / IDEs
+# ----------------------
+.vscode/
+.idea/
+*.code-workspace
+
+# ----------------------
+# Node.js (if used for UI/infra tooling)
+# ----------------------
+node_modules/
+dist/
+build/

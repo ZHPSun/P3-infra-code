@@ -1,0 +1,15 @@
+- name: Install required packages for monitoring stack
+  become: yes
+  package:
+    name:
+      - wget
+      - tar
+      - gzip
+      - unzip
+      - systemd
+    state: present
+  when: ansible_os_family in ["Debian", "RedHat", "Amazon"]
+
+- name: Test role load
+  debug:
+    msg: "Role common is active"

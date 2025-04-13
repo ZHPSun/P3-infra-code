@@ -1,0 +1,8 @@
+- name: Install Jenkins Stack
+  hosts: jenkins
+  become: yes
+
+  roles:
+    - common
+    - docker
+    - jenkins

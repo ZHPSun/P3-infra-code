@@ -1,0 +1,9 @@
+---
+- name: Install Prometheus Monitoring Stack
+  hosts: prometheus
+  become: yes
+
+  roles:
+    - cloudalchemy.prometheus
+    - cloudalchemy.node_exporter
+    - cloudalchemy.grafana

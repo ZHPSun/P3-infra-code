@@ -1,0 +1,1 @@
+需要手动解决acm validate，在hosted zone 添加cname
