@@ -1,0 +1,29 @@
+# roles/elasticsearch/tasks/main.yml
+- name: Add Elasticsearch repo for Amazon Linux 2023
+  get_url:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    dest: /etc/pki/rpm-gpg/GPG-KEY-elasticsearch
+
+- name: Create Elasticsearch repo file
+  copy:
+    dest: /etc/yum.repos.d/elasticsearch.repo
+    content: |
+      [elasticsearch]
+      name=Elasticsearch repository
+      baseurl=https://artifacts.elastic.co/packages/7.x/yum
+      gpgcheck=1
+      gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-elasticsearch
+      enabled=1
+      autorefresh=1
+      type=rpm-md
+
+- name: Install Elasticsearch
+  dnf:
+    name: elasticsearch
+    state: present
+
+- name: Enable and start Elasticsearch
+  systemd:
+    name: elasticsearch
+    enabled: yes
+    state: started

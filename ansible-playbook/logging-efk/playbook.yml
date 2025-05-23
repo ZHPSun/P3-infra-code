@@ -1,0 +1,9 @@
+- name: Install EFK (Elasticsearch, Fluent Bit, Kibana) on Amazon Linux 2023
+  hosts: efk
+  become: yes
+  roles:
+    - common
+    - elasticsearch
+    - kibana
+    - fluentbit
+# server open ports 9200 5601 and 2020

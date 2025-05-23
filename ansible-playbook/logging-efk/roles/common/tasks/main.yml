@@ -1,0 +1,27 @@
+# roles/common/tasks/main.yml
+
+- name: Update all packages (慎用，避免更新 kernel）
+  dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+  register: update_result
+
+- name: Install useful but missing tools
+  dnf:
+    name:
+      - vim
+      - unzip
+      - git
+      - bash-completion
+      - net-tools
+    state: present
+
+- name: Set timezone to UTC
+  timezone:
+    name: UTC
+
+- name: Print updated packages (可选)
+  debug:
+    msg: "Updated packages: {{ update_result.changes }}"
+  when: update_result.changed

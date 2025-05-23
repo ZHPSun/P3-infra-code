@@ -1,0 +1,29 @@
+# roles/kibana/tasks/main.yml
+- name: Add Kibana repo for Amazon Linux 2023
+  get_url:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    dest: /etc/pki/rpm-gpg/GPG-KEY-elasticsearch
+
+- name: Create Kibana repo file
+  copy:
+    dest: /etc/yum.repos.d/kibana.repo
+    content: |
+      [kibana]
+      name=Kibana repository
+      baseurl=https://artifacts.elastic.co/packages/7.x/yum
+      gpgcheck=1
+      gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-elasticsearch
+      enabled=1
+      autorefresh=1
+      type=rpm-md
+
+- name: Install Kibana
+  dnf:
+    name: kibana
+    state: present
+
+- name: Enable and start Kibana
+  systemd:
+    name: kibana
+    enabled: yes
+    state: started

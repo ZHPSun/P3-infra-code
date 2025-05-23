@@ -94,10 +94,9 @@ resource "aws_instance" "jenkins-server" {
 }
 
 resource "aws_instance" "backend-server" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.amazon_linux_2023.id
   instance_type = "t3.micro"
   key_name      = var.public_key_name
-
   tags = {
     Name = "backend-server"
   }
