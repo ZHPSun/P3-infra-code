@@ -1,10 +1,10 @@
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "amazon_linux_2023" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+    values = ["al2023-ami-*-x86_64"]
   }
 
   filter {
@@ -12,7 +12,7 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"] # Canonical
+  owners = ["137112412989"] # Amazon
 }
 
 resource "aws_vpc" "mainvpc" {
@@ -41,12 +41,7 @@ resource "aws_security_group" "newsg" {
 
 
 resource "aws_security_group_rule" "allow_ports" {
-  for_each = {
-    "ssh"     = 22
-    "http"    = 80
-    "https"   = 443
-    "jenkins" = 8080
-  }
+  for_each = var.ingress_ports
 
   type              = "ingress"
   from_port         = each.value
@@ -58,15 +53,18 @@ resource "aws_security_group_rule" "allow_ports" {
 
 
 resource "aws_instance" "ansible-server" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.amazon_linux_2023.id
   instance_type = "t3.micro"
   key_name      = var.public_key_name
   user_data     = <<-EOF
               #!/bin/bash
-              sudo yum update -y
-              sudo yum install git -y
-              git --version
-              sudo yum install ansible -y
+              # 更新系统
+              dnf update -y
+              # 安装 EPEL 仓库（可选，提供额外工具）
+              dnf install -y epel-release
+              # 安装 Ansible（Amazon Linux 2023 的官方方式）
+              dnf install -y ansible
+              # 验证安装是否成功
               ansible --version
               EOF
   tags = {
@@ -76,7 +74,7 @@ resource "aws_instance" "ansible-server" {
 
 
 resource "aws_instance" "jenkins-server" {
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.amazon_linux_2023.id
   instance_type = "t3.micro"
   key_name      = var.public_key_name
 
